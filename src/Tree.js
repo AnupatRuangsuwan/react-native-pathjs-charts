@@ -18,6 +18,9 @@ import {Text as ReactText}  from 'react-native'
 import Svg,{ Circle, G, Path, Text } from 'react-native-svg'
 import { Options, styleSvg, fontAdapt } from './util'
 import _ from 'lodash'
+
+import 'babel-polyfill'
+
 const Tree = require('paths-js/tree')
 
 function children(x) {

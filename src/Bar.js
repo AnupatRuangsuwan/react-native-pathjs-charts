@@ -19,6 +19,9 @@ import Svg,{ G, Path, Text } from 'react-native-svg'
 import { Colors, Options, fontAdapt, cyclic, color, identity } from './util'
 import _ from 'lodash'
 import Axis from './Axis'
+
+import 'babel-polyfill'
+
 const Bar = require('paths-js/bar')
 
 export default class BarChart extends Component {

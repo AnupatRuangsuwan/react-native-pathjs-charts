@@ -15,6 +15,9 @@ import {Text as ReactText}  from 'react-native'
 import Svg,{ G, Path, Text, Circle} from 'react-native-svg'
 import { Colors, Options, cyclic, identity, fontAdapt } from './util'
 import _ from 'lodash'
+
+import 'babel-polyfill'
+
 const Pie = require('paths-js/pie')
 
 export default class PieChart extends Component {
