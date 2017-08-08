@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and limitations 
 
 import React,{Component} from 'react'
 import {Text as ReactText}  from 'react-native'
-import Svg,{ G, Path, Text } from 'react-native-svg'
+import Svg,{ Circle, G, Path, Polygon, Text } from 'react-native-svg'
 import { Colors, Options, fontAdapt, cyclic, color, identity } from './util'
 import _ from 'lodash'
 import Axis from './Axis'
@@ -109,33 +109,85 @@ export default class BarChart extends Component {
       accessor: accessor
     })
 
-    let values = chart.curves.map((curve) => accessor(curve.item))
+    let max = null, value = null
+    let values = chart.curves.map((curve) => {
+      if(((curve.item && curve.item.v) || 0) > max) {
+        max = curve.item.v
+      }
+
+      value = accessor(curve.item)
+      return value
+    })
+    values.push(max + 20)
     let chartArea = {x: {minValue: 0, maxValue: 200, min: 0, max: options.chartWidth},
                      y: this.getMaxAndMin(values, chart.scale),
                      margin:options.margin}
 
     let textStyle = fontAdapt(options.axisX.label)
+    let labelStyle = fontAdapt(options.label)
 
+    let label = null
     let lines = chart.curves.map(function (c, i) {
       let color = this.color(i % 3)
       let stroke = Colors.darkenColor(color)
+      let yLabel = (options.chartHeight - ((c.item.v / max) * options.chartHeight)) - 70
+
+      if(options.label && options.label.text && i === options.label.position) {
+        label = (
+          <G scale="1" x={c.line.centroid[0] - 45} y={yLabel}>
+            <G>
+              <Polygon
+                  points="0,5 5,0 65,0 70,5 70,30 65,35 40,35 35,40 30,35 5,35, 0,30"
+                  fill={options.label.backgroundColor}
+                  stroke={options.label.strokeColor}
+                  strokeWidth="0.1"
+              />
+            </G>
+            <G x={59} y={8}>
+              <Text
+                fontFamily={labelStyle.fontFamily}
+                fontSize={labelStyle.fontSize}
+                fontWeight={labelStyle.fontWeight}
+                fontStyle={labelStyle.fontStyle}
+                fill={labelStyle.fill}
+                textAnchor="end">
+                {options.label.text}
+              </Text>
+            </G>
+            <G x={74} y={40}>
+              <Circle
+                cx="-39"
+                cy="15"
+                r="8"
+                stroke={options.label.circleStrokeColor}
+                strokeWidth={options.label.circleStrokeWidth}
+                fill={options.label.circleFillColor}
+              />
+            </G>
+          </G>
+        )
+      }
+
       return (
-                <G key={'lines' + i}>
-                    <Path  d={ c.line.path.print() } stroke={stroke} fill={color}/>
+                <G key={'lines' + i} x={-10}>
+                    <Path d={ c.line.path.print() } stroke={stroke} fill={color}/>
                     {options.axisX.showLabels ?
-                        <G x={options.margin.left} y={options.margin.top}>
+                        <G x={options.margin.left - 5} y={options.margin.top - 70}>
                         <Text fontFamily={textStyle.fontFamily}
                         fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle={textStyle.fontStyle}
-                        fill={textStyle.fill} x={c.line.centroid[0]} y={chartArea.y.min} rotate={45} textAnchor="middle">{c.item.name}</Text></G>
+                        fill={textStyle.fill} x={c.line.centroid[0]} y={chartArea.y.min} textAnchor="end">{c.item.name}</Text></G>
                         :null}
                 </G>
             )
     }, this)
 
     return (<Svg width={options.width} height={options.height}>
-              <G x={options.margin.left} y={options.margin.top}>
+              <G x={options.margin.left} y={options.margin.top + 30}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
-                {lines}
+                <G x={20}>
+                  {lines}
+                  {label}
+                </G>
               </G>
             </Svg>)
   }
