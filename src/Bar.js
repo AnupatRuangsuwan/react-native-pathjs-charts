@@ -170,9 +170,9 @@ export default class BarChart extends Component {
 
       return (
                 <G key={'lines' + i} x={-10}>
-                    <Path d={ c.line.path.print() } stroke={stroke} fill={color}/>
+                    <Path d={ c.line.path.print() } fill={color}/>
                     {options.axisX.showLabels ?
-                        <G x={options.margin.left - 5} y={options.margin.top - 70}>
+                        <G x={options.margin.left - 5} y={options.margin.top - 65}>
                         <Text fontFamily={textStyle.fontFamily}
                         fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle={textStyle.fontStyle}
                         fill={textStyle.fill} x={c.line.centroid[0]} y={chartArea.y.min} textAnchor="end">{c.item.name}</Text></G>
