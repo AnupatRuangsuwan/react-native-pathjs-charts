@@ -124,6 +124,7 @@ export default class BarChart extends Component {
                      margin:options.margin}
 
     let textStyle = fontAdapt(options.axisX.label)
+    let labelOffset = this.props.options.axisX.label.offset || 20
     let labelStyle = fontAdapt(options.label)
 
     let label = null
@@ -172,17 +173,20 @@ export default class BarChart extends Component {
                 <G key={'lines' + i} x={-10}>
                     <Path d={ c.line.path.print() } fill={color}/>
                     {options.axisX.showLabels ?
-                        <G x={options.margin.left - 5} y={options.margin.top - 65}>
                         <Text fontFamily={textStyle.fontFamily}
-                        fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle={textStyle.fontStyle}
-                        fill={textStyle.fill} x={c.line.centroid[0]} y={chartArea.y.min} textAnchor="end">{c.item.name}</Text></G>
-                        :null}
+                          fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle={textStyle.fontStyle}
+                          fill={textStyle.fill} x={c.line.centroid[0]} y={labelOffset + chartArea.y.min}
+                          originX={c.line.centroid[0]} originY={labelOffset + chartArea.y.min} rotate={textStyle.rotate}
+                          textAnchor="middle">
+                          {c.item.name}
+                        </Text>
+                    : null}
                 </G>
             )
     }, this)
 
     return (<Svg width={options.width} height={options.height}>
-              <G x={options.margin.left} y={options.margin.top + 30}>
+              <G x={options.margin.left} y={options.margin.top}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
                 <G x={20}>
                   {lines}
