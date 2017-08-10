@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and limitations 
 
 import React,{Component} from 'react'
 import {Text as ReactText}  from 'react-native'
-import Svg,{ Circle, G, Path, Polygon, Text } from 'react-native-svg'
+import Svg,{ Circle, G, Line, Path, Polygon, Text } from 'react-native-svg'
 import { Colors, Options, fontAdapt, cyclic, color, identity } from './util'
 import _ from 'lodash'
 import Axis from './Axis'
@@ -95,6 +95,8 @@ export default class BarChart extends Component {
   }
 
   render() {
+    const { maxScore, peer, score } = this.props
+
     const noDataMsg = this.props.noDataMessage || 'No data available'
     if (this.props.data === undefined) return (<ReactText>{noDataMsg}</ReactText>)
 
@@ -118,7 +120,7 @@ export default class BarChart extends Component {
       value = accessor(curve.item)
       return value
     })
-    values.push(max + 20)
+    values.push(maxScore)
     let chartArea = {x: {minValue: 0, maxValue: 200, min: 0, max: options.chartWidth},
                      y: this.getMaxAndMin(values, chart.scale),
                      margin:options.margin}
@@ -127,14 +129,22 @@ export default class BarChart extends Component {
     let labelOffset = this.props.options.axisX.label.offset || 20
     let labelStyle = fontAdapt(options.label)
 
-    let label = null
+    let label = {
+      position: null,
+      score: [],
+      peer: []
+    }
     let lines = chart.curves.map(function (c, i) {
       let color = this.color(i % 3)
-      let stroke = Colors.darkenColor(color)
+      if(chart.curves.length <= (i + 1)) {
+        color = 'transparent'
+      }
+
+      // let stroke = Colors.darkenColor(color)
       let yLabel = (options.chartHeight - ((c.item.v / max) * options.chartHeight)) - 70
 
       if(options.label && options.label.text && i === options.label.position) {
-        label = (
+        label['position'] = (
           <G scale="1" x={c.line.centroid[0] - 45} y={yLabel}>
             <G>
               <Polygon
@@ -169,6 +179,48 @@ export default class BarChart extends Component {
         )
       }
 
+      if(score && score[i]) {
+        let yPosition = (options.chartHeight - ((score[i] / maxScore) * options.chartHeight))
+
+        label['score'].push(
+          <G key={'score'+i} x={c.line.centroid[0]} y={yPosition}>
+            <Circle
+              cx="-10"
+              cy="0"
+              r="8"
+              stroke={(this.props.options.score && this.props.options.score.color) || '#E8AF3C'}
+              strokeWidth={(this.props.options.score && this.props.options.score.stroke) || 8}
+              fill={(this.props.options.score && this.props.options.score.fill) || 'transparent'}
+            />
+          </G>
+        )
+      }
+
+      if(peer && peer[i]) {
+        let yPosition = (options.chartHeight - ((peer[i] / maxScore) * options.chartHeight))
+
+        label['peer'].push(
+          <G key={'peer'+i} x={c.line.centroid[0]} y={yPosition}>
+            <Line
+              x1="-18"
+              y1="-8"
+              x2="-2"
+              y2="8"
+              stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+              strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+            />
+            <Line
+              x1="-2"
+              y1="-8"
+              x2="-18"
+              y2="8"
+              stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+              strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+            />
+          </G>
+        )
+      }
+
       return (
                 <G key={'lines' + i} x={-10}>
                     <Path d={ c.line.path.print() } fill={color}/>
@@ -189,8 +241,56 @@ export default class BarChart extends Component {
               <G x={options.margin.left} y={options.margin.top}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
                 <G x={20}>
+                  <G x={10} y={-48}>
+                    <Circle
+                      cx="-10"
+                      cy={0}
+                      r="8"
+                      stroke={(this.props.options.score && this.props.options.score.color) || '#E8AF3C'}
+                      strokeWidth={(this.props.options.score && this.props.options.score.stroke) || 8}
+                      fill={(this.props.options.score && this.props.options.score.fill) || 'transparent'}
+                    />
+                    <Text
+                      fontFamily={textStyle.fontFamily}
+                      fontSize={this.props.options.score && this.props.options.score.fontSize || 14}
+                      fontWeight={(this.props.options.score && this.props.options.score.fontWeight) || false}
+                      fill={this.props.options.score && this.props.options.score.fontColor || '#000000'}
+                      x={28} y={(this.props.options.score && this.props.options.score.fontSize || 14) - 22}
+                      textAnchor="middle">
+                      {(this.props.options.score && this.props.options.score.detail) || ' '}
+                    </Text>
+                  </G>
+                  <G x={10} y={-22}>
+                    <Line
+                      x1="-18"
+                      y1="-8"
+                      x2="-2"
+                      y2="8"
+                      stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+                      strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+                    />
+                    <Line
+                      x1="-2"
+                      y1="-8"
+                      x2="-18"
+                      y2="8"
+                      stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+                      strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+                    />
+                    <Text
+                      fontFamily={textStyle.fontFamily}
+                      fontSize={this.props.options.peer && this.props.options.peer.fontSize || 14}
+                      fontWeight={(this.props.options.peer && this.props.options.peer.fontWeight) || false}
+                      fill={this.props.options.peer && this.props.options.peer.fontColor || '#000000'}
+                      x={25} y={(this.props.options.peer && this.props.options.peer.fontSize || 14) - 22}
+                      textAnchor="middle">
+                      {(this.props.options.peer && this.props.options.peer.detail) || ' '}
+                    </Text>
+                  </G>
                   {lines}
-                  {label}
+                  {label['score']}
+                  {label['peer']}
+                  {label['position']}
                 </G>
               </G>
             </Svg>)
