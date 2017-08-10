@@ -237,55 +237,61 @@ export default class BarChart extends Component {
             )
     }, this)
 
+    console.log('this.props: ', this.props);
+
     return (<Svg width={options.width} height={options.height}>
               <G x={options.margin.left} y={options.margin.top}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
                 <G x={20}>
                   <G x={10} y={-48}>
-                    <Circle
-                      cx="-10"
-                      cy={0}
-                      r="8"
-                      stroke={(this.props.options.score && this.props.options.score.color) || '#E8AF3C'}
-                      strokeWidth={(this.props.options.score && this.props.options.score.stroke) || 8}
-                      fill={(this.props.options.score && this.props.options.score.fill) || 'transparent'}
-                    />
-                    <Text
-                      fontFamily={textStyle.fontFamily}
-                      fontSize={this.props.options.score && this.props.options.score.fontSize || 14}
-                      fontWeight={(this.props.options.score && this.props.options.score.fontWeight) || false}
-                      fill={this.props.options.score && this.props.options.score.fontColor || '#000000'}
-                      x={28} y={(this.props.options.score && this.props.options.score.fontSize || 14) - 22}
-                      textAnchor="middle">
-                      {(this.props.options.score && this.props.options.score.detail) || ' '}
-                    </Text>
-                  </G>
-                  <G x={10} y={-22}>
-                    <Line
-                      x1="-18"
-                      y1="-8"
-                      x2="-2"
-                      y2="8"
-                      stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
-                      strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
-                    />
-                    <Line
-                      x1="-2"
-                      y1="-8"
-                      x2="-18"
-                      y2="8"
-                      stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
-                      strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
-                    />
-                    <Text
-                      fontFamily={textStyle.fontFamily}
-                      fontSize={this.props.options.peer && this.props.options.peer.fontSize || 14}
-                      fontWeight={(this.props.options.peer && this.props.options.peer.fontWeight) || false}
-                      fill={this.props.options.peer && this.props.options.peer.fontColor || '#000000'}
-                      x={25} y={(this.props.options.peer && this.props.options.peer.fontSize || 14) - 22}
-                      textAnchor="middle">
-                      {(this.props.options.peer && this.props.options.peer.detail) || ' '}
-                    </Text>
+                    <G>
+                      <Circle
+                        cx="-10"
+                        cy={0}
+                        r="8"
+                        stroke={(this.props.options.score && this.props.options.score.color) || '#E8AF3C'}
+                        strokeWidth={(this.props.options.score && this.props.options.score.stroke) || 8}
+                        fill={(this.props.options.score && this.props.options.score.fill) || 'transparent'}
+                      />
+                      <Text
+                        fontFamily={textStyle.fontFamily}
+                        fontSize={this.props.options.score && this.props.options.score.fontSize || 14}
+                        fontWeight={(this.props.options.score && this.props.options.score.fontWeight) || false}
+                        fill={this.props.options.score && this.props.options.score.fontColor || '#000000'}
+                        x={52}
+                        y={(this.props.options.score && this.props.options.score.fontSize || 14) - 24}
+                        textAnchor="middle">
+                        {(this.props.options.score && this.props.options.score.detail) || ' '}
+                      </Text>
+                    </G>
+                    <G x={120}>
+                      <Line
+                        x1="-18"
+                        y1="-8"
+                        x2="-2"
+                        y2="8"
+                        stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+                        strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+                      />
+                      <Line
+                        x1="-2"
+                        y1="-8"
+                        x2="-18"
+                        y2="8"
+                        stroke={(this.props.options.peer && this.props.options.peer.color) || "red"}
+                        strokeWidth={(this.props.options.peer && this.props.options.peer.stroke) || "6"}
+                      />
+                      <Text
+                        fontFamily={textStyle.fontFamily}
+                        fontSize={this.props.options.peer && this.props.options.peer.fontSize || 14}
+                        fontWeight={(this.props.options.peer && this.props.options.peer.fontWeight) || false}
+                        fill={this.props.options.peer && this.props.options.peer.fontColor || '#000000'}
+                        x={90}
+                        y={(this.props.options.peer && this.props.options.peer.fontSize || 14) - 24}
+                        textAnchor="middle">
+                        {(this.props.options.peer && this.props.options.peer.detail) || ' '}
+                      </Text>
+                    </G>
                   </G>
                   {lines}
                   {label['score']}
