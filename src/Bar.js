@@ -237,13 +237,11 @@ export default class BarChart extends Component {
             )
     }, this)
 
-    console.log('this.props: ', this.props);
-
     return (<Svg width={options.width} height={options.height}>
               <G x={options.margin.left} y={options.margin.top}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
                 <G x={20}>
-                  <G x={10} y={-48}>
+                  <G x={10} y={-40}>
                     <G>
                       <Circle
                         cx="-10"
