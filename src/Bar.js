@@ -225,8 +225,9 @@ export default class BarChart extends Component {
                 <G key={'lines' + i} x={-10}>
                     <Path d={ c.line.path.print() } fill={color}/>
                     {options.axisX.showLabels ?
-                        <Text fontFamily={textStyle.fontFamily}
-                          fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle={textStyle.fontStyle}
+                        <Text 
+                          fontFamily={textStyle.fontFamily}
+                          fontSize={textStyle.fontSize} fontWeight={textStyle.fontWeight} fontStyle="italic"
                           fill={textStyle.fill} x={c.line.centroid[0]} y={labelOffset + chartArea.y.min}
                           originX={c.line.centroid[0]} originY={labelOffset + chartArea.y.min} rotate={textStyle.rotate}
                           textAnchor="middle">
