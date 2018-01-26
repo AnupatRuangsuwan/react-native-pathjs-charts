@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and limitations 
 
 import React,{Component} from 'react'
 import {Text as ReactText}  from 'react-native'
-import Svg,{ Circle, G, Line, Path, Polygon, Text } from 'react-native-svg'
+import Svg,{ Circle, G, Line, Path, Polygon, Text, Rect } from 'react-native-svg'
 import { Colors, Options, fontAdapt, cyclic, color, identity } from './util'
 import _ from 'lodash'
 import Axis from './Axis'
@@ -242,7 +242,7 @@ export default class BarChart extends Component {
               <G x={options.margin.left} y={options.margin.top}>
                 <Axis scale={chart.scale} options={options.axisY} chartArea={chartArea} />
                 <G x={20}>
-                  <G x={10} y={-40}>
+                  <G x={0} y={-65}>
                     <G>
                       <Circle
                         cx="-10"
@@ -258,7 +258,7 @@ export default class BarChart extends Component {
                         fontWeight={(this.props.options.score && this.props.options.score.fontWeight) || false}
                         fill={this.props.options.score && this.props.options.score.fontColor || '#000000'}
                         x={52}
-                        y={(this.props.options.score && this.props.options.score.fontSize || 14) - 24}
+                        y={(this.props.options.score && this.props.options.score.fontSize || 14) - 20}
                         textAnchor="middle">
                         {(this.props.options.score && this.props.options.score.detail) || ' '}
                       </Text>
@@ -285,10 +285,31 @@ export default class BarChart extends Component {
                         fontSize={this.props.options.peer && this.props.options.peer.fontSize || 14}
                         fontWeight={(this.props.options.peer && this.props.options.peer.fontWeight) || false}
                         fill={this.props.options.peer && this.props.options.peer.fontColor || '#000000'}
-                        x={90}
-                        y={(this.props.options.peer && this.props.options.peer.fontSize || 14) - 24}
+                        x={75}
+                        y={(this.props.options.peer && this.props.options.peer.fontSize || 14) - 20}
                         textAnchor="middle">
                         {(this.props.options.peer && this.props.options.peer.detail) || ' '}
+                      </Text>
+                    </G>
+                    <G x={0} y={30}>
+                      <Rect
+                          x="-18"
+                          y="-8"
+                          width="18"
+                          height="18"
+                          stroke="blue"
+                          strokeWidth="2"
+                          fill="blue"
+                      />
+                      <Text
+                        fontFamily={textStyle.fontFamily}
+                        fontSize={this.props.options.score && this.props.options.score.fontSize || 14}
+                        fontWeight={(this.props.options.score && this.props.options.score.fontWeight) || false}
+                        fill={this.props.options.score && this.props.options.score.fontColor || '#000000'}
+                        x={74}
+                        y={(this.props.options.score && this.props.options.score.fontSize || 14) - 20}
+                        textAnchor="middle">
+                        คะแนนเฉลี่ยจากสถิติเก่า
                       </Text>
                     </G>
                   </G>
